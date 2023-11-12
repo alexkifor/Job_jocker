@@ -1,0 +1,54 @@
+{% extends 'employer_navbar.html' %}
+{% block title %} Мои отклики {% endblock %}
+{% block employer_applications %} active {% endblock %}
+{% block css %}
+{% endblock %}
+{% block body %}
+<div class="container mt-4">
+<table class="table table-hover" id="example">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Профессия</th>
+            <th>Зарплата</th>
+            <th>ФИО Соискателя</th>
+            <th>Дата приглашения</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{application.vacancy.profession}}</td>
+            <td>{{application.vacancy.salary}}</td>
+            <td>{{application.resume.name}} {{application.resume.surname}}</td>
+            <td>{{application.created}}</td>
+            {% if application.creator.id == user.id %}
+                {% if application.status == 'Отправлено' %}
+                    <td style="font-weight: bold">Приглашение отправлено</td>
+                {% elif application.status == 'Принято' %}
+                    <td style="color: rgb(16, 148, 108); font-weight: bold" >Приглашение принято</td>
+                {% elif application.status == 'Отклонено' %}
+                    <td style="color: crimson; font-weight: bold" >Приглашение отклонено</td>
+                {% endif %}
+            {% else %}
+                {% if application.status == 'Отправлено' %}
+                    <td style="color:dodgerblue; font-weight: bold">Получено резюме</td>
+                {% elif application.status == 'Принято' %}
+                    <td style="color: rgb(16, 148, 108); font-weight: bold" >Резюме принято</td>
+                {% elif application.status == 'Отклонено' %}
+                    <td style="color: crimson; font-weight: bold" >Резюме отклонено</td>
+                {% endif %}
+            {% endif %}
+            <td><a href="{% url 'employer_application_detail' application.id%}" type="submit" class="btn" style="background-color: #666666; color: white; width: 6rem;">Открыть</a></td>
+            <td><a href="{% url 'employer_application_delete' application.id%}" type="submit" class="btn btn-danger">Удалить</a></td>
+            {% if application.status == 'Принято' %}
+                <td><a href="{% url 'chat' application.chat.id%}" class="btn" style="background-color: #4caabb; color: white; width: 6rem;">Чат</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,247 @@
+{% extends 'basic.html' %}
+
+{% block title %} Job Jocker {% endblock %}
+{% block css %}
+    <style>
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .site-footer{
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #666666;
+            height: auto;
+            width: 100vw;
+
+            padding-top: 5px;
+            color: #fff;
+        }
+        .footer-content{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        .footer-content h3{
+            font-size: 2.1rem;
+            font-weight: 500;
+            line-height: 3rem;
+        }
+        .footer-content p{
+            max-width: 500px;
+            margin: 3px auto;
+            line-height: 28px;
+            font-size: 14px;
+            color: #cacdd2;
+        }
+        .socials{
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0 1rem 0;
+        }
+        .socials li{
+            margin: 0 10px;
+
+        }
+        .socials a{
+            text-decoration: none;
+            color: #fff;
+            padding: 5px;
+
+        }
+        .socials a i{
+            font-size: 3rem;
+            width: 20px;
+
+
+            transition: color .4s ease;
+
+        }
+        .socials a:hover i{
+            color: #5aa5b9;
+        }
+
+        .footer-bottom{
+        background-color: var(--color-sub-light);
+        width: 100vw;
+        padding: 20px;
+        padding-bottom: 40px;
+        text-align: center;
+        }
+        .footer-bottom p{
+        color:#fff;
+        float: left;
+            font-size: 14px;
+            word-spacing: 2px;
+
+        }
+        .footer-bottom p a{
+        color:#5aa5b9;
+        font-size: 16px;
+        text-decoration: none;
+        }
+        .footer-bottom span{
+            text-transform: uppercase;
+            opacity: .4;
+            font-weight: 200;
+        }
+        .footer-icons{
+        color: #ccc;
+        max-height: 32px;
+        }
+    </style>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    window.onload = function () {
+        var chart = new CanvasJS.Chart("chartContainer",
+        {
+            theme: "light2",
+
+            data: [
+            {
+                type: "pie",
+                showInLegend: true,
+                toolTipContent: "{y} - #percent %",
+                yValueFormatString: "###",
+                legendText: "{indexLabel}",
+                dataPoints: [
+                    {  y: {{it_vacancies_count}} , indexLabel: "IT" },
+                    {  y: {{other_vacancies_count}} , indexLabel: "Другие" },
+                ]
+            }
+            ]
+        });
+        chart.render();
+        var chart2 = new CanvasJS.Chart("chartContainer2",
+        {
+            theme: "light1",
+            data: [
+            {
+                type: "pie",
+                showInLegend: true,
+                toolTipContent: "{y} - #percent %",
+                yValueFormatString: "###",
+                legendText: "{indexLabel}",
+                dataPoints: [
+                    {  y: {{vacancies_count}} , indexLabel: "Вакансии" },
+                    {  y: {{resumes_count}} , indexLabel: "Резюме" },
+                ]
+            }
+            ]
+        });
+        chart2.render();
+    }
+</script>
+<script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script></head>
+{% endblock %}
+{% block body %}
+{% load static %}
+
+<div class="container-fluid mt-2 bg-image"
+    style="
+    /* background-image: url({% static 'recruting.png' %}); */
+    background-size: cover;
+    background-attachment: fixed;
+    /* height: 100vh; */
+    height: auto;
+    width: 100vw;
+    padding-left: 10%;
+    padding-right: 10%;
+    "
+    >
+    <div class="card w-100"
+    style="background-color: rgb(255, 255, 255); color: rgb(255, 255, 255); margin-bottom: 10px;">
+    <h1 class="card-title" style="text-align: center; "><span style="color: #FBAD30;">В поисках</span> <span style="color: #CC0033;">работы?</span></h1>
+    </div>
+    <div class="row row-cols-1 row-cols-md-5 g-4"
+        style="margin-left: 0; margin-right: 0;">
+        {% for vacancy in vacancies %}
+        <div class="card mb-5"
+            style=" background-color: rgba(79, 78, 78, 0.5); color: white; margin-bottom: 20px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                        <img
+                            src="{{vacancy.card_id.logo.url}}"
+                            alt=""
+                            class="img-fluid rounded-start"
+                        />
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <h5 class="card-title">{{vacancy.profession}}</h5>
+                    <p class="card-text">{{vacancy.card_id.legal_form}} {{vacancy.card_id.name}}<br>
+                        {{vacancy.salary}} рублей в месяц
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <a class="card w-100"
+        href="{% url 'news' %}"
+        style="background-color: rgba(37, 118, 143, 0.8); color: white; margin-bottom: 30px; box-sizing: border-box; text-decoration: none;">
+        <div class="row g-0">
+            <div class="col-md-4"
+                style="width: auto">
+                    <img
+                        src="{{news_item.picture.url}}"
+                        alt=""
+                        class="img-fluid rounded-start"
+                        style="width: 200px;"
+                    />
+            </div>
+            <div class="col-md-10">
+                <div class="card-body">
+                    <h5 class="card-title">{{news_item.headline}}</h5>
+                    <p class="card-text">{{news_item.text}}</p>
+                </div>
+                <div class="card-footer">
+                    <small style="color:white">{{news_item.created | date:'Y-m-d H:m:s'}}</small>
+                </div>
+            </div>
+
+        </div>
+    </a>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4"
+        style="margin-bottom: 10px;">
+        <div style="margin-bottom: 10px; padding-right: 10px;">
+            <h5 style="text-align: center">Доля IT сектора на рынке труда</h5>
+            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+        </div>
+        <div style="margin-bottom: 10px; padding-left: 10px;">
+            <h5 style="text-align: center">Соотношение количества резюме и количества вакансий</h5>
+            <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer" style="position: sticky;">
+    <div class="footer-content">
+        <h3><span class="head1">JOB</span><span class="head2">JOCKER</span></h3>
+        <p>Ресурс для поиска моднейших работников и отличной работы, например</p>
+        <ul class="socials">
+            <li><a href="#"><img class="footer-icons" alt="Telegram" src="{% static 'icons/plane.svg' %}"></a></li>
+            <li><a href="#"><img class="footer-icons" alt="Hatogram" src="{% static 'icons/hat.svg' %}"></a></li>
+            <li><a href="#"><img class="footer-icons" alt="Catogram" src="{% static 'icons/cat.svg' %}"></a></li>
+            <li><a href="#"><img class="footer-icons" alt="Birdogram" src="{% static 'icons/bird.svg' %}"></a></li>
+        </ul>
+    </div>
+
+</footer>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'employer_navbar.html' %}
+{% block title %} Резюме соискателей {% endblock %}
+{% block resumes %} active {% endblock %}
+{% block css %}
+{% endblock %}
+{% block body %}
+<div class="container mt-4">
+    <section class="text-center" style="margin-bottom: 20px;">
+        <div class="container container--narrow">
+            <div class="hero-section__box">
+                <h2>Поиск по <span>резюме</span></h2>
+            </div>
+            <form id='searchForm' class="form" action="{% url 'resumes' %}" method="get">
+                <div class="input-group" style="justify-content: center;">
+                    <div class="form-outline" style="width: 35%">
+                        <input class="form-control" id="formInput#search" type="search" name="search_query"
+                            placeholder="Поиск по профессии, навыкам, образованию" value="{{ search_query }}" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+<table class="table table-hover" id="example">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>ФИО Соискателя</th>
+            <th>Профессия</th>
+            <th>Навыки</th>
+            <th>Дата размещения</th>
+            <th>Зарплата</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resume in resumes %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{resume.name}} {{resume.surname}}</td>
+            <td>{{resume.profession}}</td>
+            <td>{{resume.skills}}</td>
+            <td>{{resume.created}}</td>
+            <td>{{resume.salary}}</td>
+            <td><a href="{% url 'resume_employer' resume.id%}" type="submit" class="btn" style="background-color: #666666; color: white; width: 8rem;">Открыть</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include 'pagination.html' with queryset=resumes custom_range=custom_range %}
+ </h6>
+</div>
+{% endblock %}

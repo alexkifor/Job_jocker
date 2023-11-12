@@ -1,0 +1,20 @@
+{% extends 'employer_navbar.html' %}
+
+{% block title %} Отправить предложение {% endblock %}
+{% block vacancies %} active {% endblock %}
+{% block css %}
+{% endblock %}
+{% block body %}
+{% endblock %}
+{% block js %}
+<script>
+    {% if alert %}
+    alert("Отклик отправлен")
+    window.location = "{% url 'resumes' %}"
+    {% endif %}
+    {% if alert_repeat %}
+    alert("Отклик уже существует")
+    window.location = "{% url 'resumes' %}"
+    {% endif %}
+</script>
+{% endblock %}
