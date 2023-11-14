@@ -300,14 +300,14 @@ def chat(request, chat_id):
     chat = Chat.objects.get(id=chat_id)
     messages = Message.objects.filter(chat=chat).order_by('timestamp')
     try:
+        to_send = Applicant.objects.get(user=request.user)
         if request.method == 'POST':
-            to_send = Applicant.objects.get(user=request.user)
             text = request.POST['text']
             message = Message.objects.create(chat=chat, to_send=to_send.user, text=text)
         return render(request, 'chat_applicant.html', {'messages': messages})
     except:
-        if request.method == 'POST':
-            to_send = Card.objects.get(user=request.user)
+        to_send = Card.objects.get(user=request.user)
+        if request.method == 'POST': 
             text = request.POST['text']
             message = Message.objects.create(chat=chat, to_send=to_send.user, text=text)
         return render(request, 'chat_employer.html', {'messages': messages})
